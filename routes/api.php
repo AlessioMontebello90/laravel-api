@@ -17,11 +17,4 @@ use App\Http\Controllers\Api\ProjectController;
 */
 
 
-Route::get("/projects", function () {
-
-    $projects = Project::all();
-
-    return response()->json([
-        "projects" => $projects
-    ]);
-});
+Route::apiResource("projects", ProjectController::class)->only(["index", "show"]);
