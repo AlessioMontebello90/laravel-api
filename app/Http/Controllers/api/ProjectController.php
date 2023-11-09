@@ -17,7 +17,7 @@ class ProjectController extends Controller
      */
     public function index()
     {
-        // importo la lista dei projects
+        
         $projects = Project::select("id", "type_id", "name", "slug", "description")
             ->paginate(5);
 
@@ -32,10 +32,7 @@ class ProjectController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
-    {
-        
-    }
+   
 
     /**
      * Display the specified resource.
@@ -43,9 +40,19 @@ class ProjectController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($slug)
     {
-        
+        $project = Project::select("id", "type_id", "name", "slug", "description")
+        ->with('type:id,label,color', 'tecnologies:id,label,color')
+        ->where('slug', '=', $slug)
+        ->first();
+
+        if (!$project) {
+            abort(404, 'page not found');
+        }
+        ;
+       return response()->json($project);
+     
     }
 
     /**
